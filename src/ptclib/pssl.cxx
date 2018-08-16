@@ -664,6 +664,15 @@ PSSLDiffieHellman::~PSSLDiffieHellman()
 // 5/26/06 Hannes Friederich - Mac OS X seems to need that fix too...
 // 3/15/08 Hannes Friederich - Mac OS X 10.5 (Darwin 9.X) no longer needs this
 #undef  d2i_DHparams_bio
+#ifdef __APPLE__
+#define d2i_DHparams_bio(bp,x) \
+ (DH *)ASN1_d2i_bio( \
+         (void *(*)())(void *)DH_new, \
+         (void *(*)(void **, const unsigned char **, long))(void *)d2i_DHparams, \
+         (bp), \
+         (void **)(x) \
+)
+#else
 #define d2i_DHparams_bio(bp,x) \
  (DH *)ASN1_d2i_bio( \
          (char *(*)(...))(void *)DH_new, \
@@ -671,6 +680,7 @@ PSSLDiffieHellman::~PSSLDiffieHellman()
          (bp), \
          (unsigned char **)(x) \
 )
+#endif
 #endif
 
 PBoolean PSSLDiffieHellman::Load(const PFilePath & dhFile,
