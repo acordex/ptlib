@@ -359,7 +359,7 @@ int PThread::PXBlockOnIO(int handle, int type, const PTimeInterval & timeout)
   PTRACE(7, "PWLib\tPThread::PXBlockOnIO(" << handle << ',' << type << ')');
 
   if ((handle < 0) || (handle >= PProcess::Current().GetMaxHandles())) {
-    PTRACE(2, "PWLib\tAttempt to use illegal handle in PThread::PXBlockOnIO, handle=" << handle);
+    PTRACE(0, "PWLib\tAttempt to use illegal handle in PThread::PXBlockOnIO, handle=" << handle);
     errno = EBADF;
     return -1;
   }

@@ -132,9 +132,11 @@ PBoolean PChannel::PXSetIOBlock(PXBlockType type, const PTimeInterval & timeout)
   px_threadMutex.Signal();
 
   // if select returned < 0, then convert errno into lastError and return PFalse
-  if (stat < 0)
+  if (stat < 0) {
+  	PTRACE(0, "PXBlockOnIO stat " << stat << " handle " << os_handle);
     return ConvertOSError(stat, group);
-
+  }
+  
   // if the select succeeded, then return PTrue
   if (stat > 0) 
     return PTrue;
@@ -225,6 +227,7 @@ PBoolean PChannel::Write(const void * buf, PINDEX len, const void * /*mark*/)
 }
 
 #ifdef P_HAS_RECVMSG
+#include <sys/uio.h>
 
 PBoolean PChannel::Read(const VectorOfSlice & slices)
 {

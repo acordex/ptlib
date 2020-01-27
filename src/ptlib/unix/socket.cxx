@@ -161,6 +161,7 @@ static int SetNonBlocking(int fd)
 #endif
     return fd;
 
+  PTRACE(0, "SetNonBlocking failed " << fd << " errno " << errno);
   ::close(fd);
   return -1;
 }
@@ -642,10 +643,12 @@ PBoolean PSocket::os_recvfrom(
 
   // attempt to read non-out of band data
   int r = ::recvfrom(os_handle, (char *)buf, len, flags, (sockaddr *)addr, (socklen_t *)addrlen);
-  if (!ConvertOSError(r, LastReadError))
+  if (!ConvertOSError(r, LastReadError)) {
+  	PTRACE(0, "Read error " << os_handle << " buf " << buf << " flags " << flags << " LastReadError " << lastErrorNumber[LastReadError]);
     return PFalse;
-
+  }
   lastReadCount = r;
+  if (lastReadCount <= 0) PTRACE(0, "Read error " << os_handle << " buf " << buf << " flags " << flags << " r = " << r);
   return lastReadCount > 0;
 }
 

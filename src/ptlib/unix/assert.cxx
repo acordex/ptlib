@@ -93,6 +93,12 @@ static PBoolean PAssertAction(int c, const char * msg)
 void PAssertFunc(const char * msg)
 
 {
+	/* Acordex added so we generate a crash and can find the problem */
+  PError << msg << endl;
+  PGetErrorStream().flush();
+  char *p = (char *)0xdeadd00f;
+  *p = 55;
+
 #ifdef P_BEOS
   // Print location in Eddie-compatible format
   PError << msg << endl;

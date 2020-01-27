@@ -92,8 +92,10 @@ static PBoolean PAssertThreadOp(int retval,
     // Give up and assert
   }
 
+  // Acordex CB 3/31/11 - survive this issue, determine what error we got
+  PTRACE(0, "PTLib\t" << funcname << " failed errno = " << errno);
 #if P_USE_ASSERTS
-  PAssertFunc(file, line, NULL, psprintf("Function %s failed", funcname));
+  //PAssertFunc(file, line, NULL, psprintf("Function %s failed", funcname));
 #endif
   return false;
 }
@@ -943,7 +945,8 @@ void PThread::WaitForTermination() const
 PBoolean PThread::WaitForTermination(const PTimeInterval & maxWait) const
 {
   pthread_t id = m_threadId;
-  if (id == 0 || this == Current()) {
+  /* Acordex added by be redundant */
+  if (id == 0 || this == Current() || id == Current()->GetThreadId()) {
     PTRACE(2, "WaitForTermination on 0x" << hex << id << dec << " short circuited");
     return true;
   }
@@ -1145,7 +1148,7 @@ int PThread::PXBlockOnIO(int handle, int type, const PTimeInterval & timeout)
   PTRACE(7, "PTLib\tPThread::PXBlockOnIO(" << handle << ',' << type << ')');
 
   if ((handle < 0) || (handle >= PProcess::Current().GetMaxHandles())) {
-    PTRACE(2, "PTLib\tAttempt to use illegal handle in PThread::PXBlockOnIO, handle=" << handle);
+    PTRACE(0, "PTLib\tAttempt to use illegal handle in PThread::PXBlockOnIO, handle=" << handle);
     errno = EBADF;
     return -1;
   }
@@ -1186,6 +1189,8 @@ int PThread::PXBlockOnIO(int handle, int type, const PTimeInterval & timeout)
     retval = ::select(PMAX(handle, unblockPipe[0])+1,
                       read_fds, write_fds, exception_fds, tval);
   } while (retval < 0 && errno == EINTR);
+  if (retval < 0 && errno == EINVAL)
+  	PTRACE(0, "invalid parameter in PXBlockOnIO handle " << handle << " unblockPipe[0] " << unblockPipe[0]);
 
   if ((retval == 1) && read_fds.IsPresent(unblockPipe[0])) {
     BYTE ch;

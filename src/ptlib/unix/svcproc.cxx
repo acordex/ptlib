@@ -217,11 +217,8 @@ int PServiceProcess::InitialiseService()
     pid_t pid;
 
     {
-      #ifdef __APPLE__
       ifstream pidfile((string&) pidfilename);
-      #else
-      ifstream pidfile(pidfilename);
-      #endif
+
       if (!pidfile.is_open()) {
         cout << "Could not open pid file: \"" << pidfilename << "\""
                 " - " << strerror(errno) << endl;
@@ -388,11 +385,8 @@ int PServiceProcess::InitialiseService()
   // Run as a daemon, ie fork
 
   if (!pidfilename) {
-    #ifdef __APPLE__
     ifstream pidfile((string&) pidfilename);
-    #else
-    ifstream pidfile(pidfilename);
-    #endif
+
     if (pidfile.is_open()) {
       pid_t pid;
       pidfile >> pid;
@@ -420,11 +414,8 @@ int PServiceProcess::InitialiseService()
       cout << "Daemon started with pid " << pid << endl;
       if (!pidfilename) {
         // Write out the child pid to magic file in /var/run (at least for linux)
-        #ifdef __APPLE__
         ofstream pidfile((string&) pidfilename);
-        #else
-        ofstream pidfile(pidfilename);
-        #endif
+
         if (pidfile.is_open())
           pidfile << pid;
         else
