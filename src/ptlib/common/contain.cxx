@@ -1223,7 +1223,10 @@ PString PString::Mid(PINDEX start, PINDEX len) const
   if (len <= 0 || start < 0)
     return Empty();
 
-  if (start+len < start) // Beware of wraparound
+ // Acordex CB - added 'len == P_MAX_INDEX || seems that the
+ // 'start+len < start' fails when P_MAX_INDEX == 0x7FFFFFFF as the arithmetic
+ // must be 64 bit in the CPU
+  if (len == P_MAX_INDEX || start+len < start) // Beware of wraparound
     return operator()(start, P_MAX_INDEX);
   else
     return operator()(start, start+len-1);
