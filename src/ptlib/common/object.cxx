@@ -114,7 +114,7 @@ void PAssertFunc(const char * file,
   };
 
   const char * theMsg;
-  char msgbuf[20];
+  char msgbuf[22];
   if (msg < PMaxStandardAssertMessage)
     theMsg = textmsg[msg];
   else {
@@ -255,7 +255,7 @@ PObject::Comparison PSmartPointer::Compare(const PObject & obj) const
 #undef realloc
 #undef free
 
-#if (__GNUC__ >= 3) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
+#if (__GNUC__ >= 3 && __GNUC__ < 8) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
 void * operator new(size_t nSize) throw (std::bad_alloc)
 #else
 void * operator new(size_t nSize)
@@ -265,7 +265,7 @@ void * operator new(size_t nSize)
 }
 
 
-#if (__GNUC__ >= 3) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
+#if (__GNUC__ >= 3 && __GNUC__ < 8) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
 void * operator new[](size_t nSize) throw (std::bad_alloc)
 #else
 void * operator new[](size_t nSize)
@@ -275,7 +275,7 @@ void * operator new[](size_t nSize)
 }
 
 
-#if (__GNUC__ >= 3) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
+#if (__GNUC__ >= 3 && __GNUC__ < 8) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
 void operator delete(void * ptr) throw()
 #else
 void operator delete(void * ptr)
@@ -285,7 +285,7 @@ void operator delete(void * ptr)
 }
 
 
-#if (__GNUC__ >= 3) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
+#if (__GNUC__ >= 3 && __GNUC__ < 8) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
 void operator delete[](void * ptr) throw()
 #else
 void operator delete[](void * ptr)
@@ -949,7 +949,7 @@ void PMemoryHeap::SetAllocationBreakpoint(DWORD objectNumber)
 
 #if !defined(P_VXWORKS) && !defined(_WIN32_WCE)
 
-#if (__GNUC__ >= 3) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
+#if (__GNUC__ >= 3 && __GNUC__ < 8) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
 void * operator new[](size_t nSize) throw (std::bad_alloc)
 #else
 void * operator new[](size_t nSize)
@@ -958,7 +958,7 @@ void * operator new[](size_t nSize)
   return malloc(nSize);
 }
 
-#if (__GNUC__ >= 3) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
+#if (__GNUC__ >= 3 && __GNUC__ < 8) || ((__GNUC__ == 2)&&(__GNUC_MINOR__ >= 95)) //2.95.X & 3.X
 void operator delete[](void * ptr) throw ()
 #else
 void operator delete[](void * ptr)

@@ -1189,9 +1189,9 @@ int PThread::PXBlockOnIO(int handle, int type, const PTimeInterval & timeout)
     retval = ::select(PMAX(handle, unblockPipe[0])+1,
                       read_fds, write_fds, exception_fds, tval);
   } while (retval < 0 && errno == EINTR);
-  if (retval < 0 && errno == EINVAL)
+  if (retval < 0 && errno == EINVAL) {
   	PTRACE(0, "invalid parameter in PXBlockOnIO handle " << handle << " unblockPipe[0] " << unblockPipe[0]);
-
+  }
   if ((retval == 1) && read_fds.IsPresent(unblockPipe[0])) {
     BYTE ch;
     PAssertOS(::read(unblockPipe[0], &ch, 1) != -1);

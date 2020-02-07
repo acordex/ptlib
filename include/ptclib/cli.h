@@ -675,7 +675,7 @@ class PCLISocket : public PCLI
     ContextMap_t m_contextBySocket;
 };
 
-
+#if P_TELNET
 /**Command Line Interpreter over Telnet sockets.
    This class allows for access and automatic creation of command line
    interpreter contexts from incoming Telnet connections on a listening port.
@@ -696,6 +696,7 @@ class PCLITelnet : public PCLISocket
     virtual PTCPSocket * CreateSocket();
 };
 
+#endif
 
 #endif // PTLIB_CLI_H
 

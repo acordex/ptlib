@@ -147,7 +147,9 @@ public:
 typedef PFactory<PWAVFileFormat, PCaselessString> PWAVFileFormatByFormatFactory;
 typedef PFactory<PWAVFileFormat, unsigned> PWAVFileFormatByIDFactory;
 
+#if P_WAVFILE
 PFACTORY_LOAD(PWAVFileFormatPCM);
+#endif
 
 
 /**Abstract factory class for autoconversion of WAV files to/from PCM-16.

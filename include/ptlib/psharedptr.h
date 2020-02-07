@@ -60,7 +60,7 @@ class PSharedPtr : public PContainer
       : PContainer(c)
     { CopyContents(c); } 
 
-    PSharedPtr(std::auto_ptr<element_type> & v)
+    PSharedPtr(std::unique_ptr<element_type> & v)
     { ptr = v.release(); }
 
     PSharedPtr & operator=(const PSharedPtr & c) 
